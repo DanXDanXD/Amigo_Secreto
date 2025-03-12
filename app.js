@@ -1,41 +1,34 @@
-const input = document.createElement("input");
-input.type = "text";
-input.placeholder = "Digite um nome";
-document.body.appendChild(input);
+let amigos = [];
 
-const buttonAdd = document.createElement("button");
-buttonAdd.textContent = "Adicionar";
-document.body.appendChild(buttonAdd);
-
-const lista = document.createElement("ul");
-document.body.appendChild(lista);
-
-const buttonSortear = document.createElement("button");
-buttonSortear.textContent = "Sortear amigo";
-document.body.appendChild(buttonSortear);
-
-const resultado = document.createElement("p");
-document.body.appendChild(resultado);
-
-buttonAdd.addEventListener("click", () => {
+function adicionarAmigo() {
+    const input = document.getElementById("amigo");
     const nome = input.value.trim();
-    if (nome === "" || amigos.includes(nome)) {
-        alert("Nome inválido ou já adicionado.");
+
+    if (nome === "") {
+        alert("Por favor, insira um nome válido.");
         return;
     }
+
+    if (amigos.includes(nome)) {
+        alert("Esse nome já foi adicionado.");
+        return;
+    }
+
     amigos.push(nome);
     atualizarLista();
     input.value = "";
-});
+}
 
 function atualizarLista() {
+    const lista = document.getElementById("listaAmigos");
     lista.innerHTML = "";
+
     amigos.forEach((amigo, index) => {
         const item = document.createElement("li");
         item.textContent = amigo;
         const botaoRemover = document.createElement("button");
         botaoRemover.textContent = "X";
-        botaoRemover.addEventListener("click", () => removerAmigo(index));
+        botaoRemover.onclick = () => removerAmigo(index);
         item.appendChild(botaoRemover);
         lista.appendChild(item);
     });
@@ -46,11 +39,21 @@ function removerAmigo(index) {
     atualizarLista();
 }
 
-buttonSortear.addEventListener("click", () => {
+function sortearAmigo() {
     if (amigos.length === 0) {
         alert("Adicione pelo menos um amigo para realizar o sorteio.");
         return;
     }
+    
     let sorteado = amigos[Math.floor(Math.random() * amigos.length)];
-    resultado.textContent = `O amigo sorteado é: ${sorteado}`;
-});
+    exibirResultado(sorteado);
+}
+
+function exibirResultado(sorteado) {
+    const listaResultado = document.getElementById("resultado");
+    listaResultado.innerHTML = "";
+
+    const item = document.createElement("li");
+    item.textContent = `O amigo sorteado é: ${sorteado}`;
+    listaResultado.appendChild(item);
+}
